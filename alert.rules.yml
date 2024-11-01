@@ -1,0 +1,31 @@
+groups:
+- name: BlackboxAlerts
+  rules:
+  - alert: EndpointDown
+    expr: probe_success == 0
+    for: 10s
+    labels:
+      severity: "critical"
+    annotations:
+      summary: "Endpoint {{ $labels.instance }} down"
+
+- name: ssl_expiry.rules 
+  rules: 
+  - alert: SSLCertExpiringSoon 
+    expr: probe_ssl_earliest_cert_expiry{job="blackbox-tcp_connect_tls"} - time() < 86400 * 30 
+    for: 10m
+    labels:
+      severity: "critical"
+    annotations:
+      summary: "Certificate for {{ $labels.instance }} is expiring soon"
+
+- name: mysql_up
+  rules:
+  - alert: MysqldDown
+    expr: mysql_up == 0
+    for: 10s
+    labels:
+      severity: "critical"
+    annotations:
+      summary: "Mysqld service {{ $labels.instance }} is down"
+

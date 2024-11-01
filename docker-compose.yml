@@ -1,0 +1,9 @@
+services:
+  prometheus:
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    image: elicro/prometheus:latest
+    environment:
+      - TZ=Asia/Jerusalem
+    restart: unless-stopped
